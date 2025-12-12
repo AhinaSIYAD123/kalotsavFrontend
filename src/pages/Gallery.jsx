@@ -3,9 +3,11 @@ import { Box, Typography, Grid, Card } from "@mui/material";
 import Navbar from "../components/Navbar";
 import { getVideosAPI } from "../services/allAPIs";
 import { useThemeContext } from "../ContextShareAPI/ThemeContext"; 
+import { serverURL } from "../services/serverURL"; // make sure to import serverURL
 export default function Gallery() {
   const [videos, setVideos] = useState([]);
-  const { mode } = useThemeContext(); 
+  const { mode } = useThemeContext();
+
   useEffect(() => {
     fetchVideos();
   }, []);
@@ -13,7 +15,6 @@ export default function Gallery() {
   const fetchVideos = async () => {
     try {
       const res = await getVideosAPI();
-      console.log("Videos response:", res);
       if (res.data.success) {
         setVideos(res.data.data);
       } else {
@@ -26,17 +27,18 @@ export default function Gallery() {
 
   const pageBg = mode === "light" ? "#f9f9f9" : "#121212";
   const textColor = mode === "light" ? "#000" : "#fff";
-  const subtitleColor = mode === "light" ? "#555" : "#aaa";
-  const cardBg = mode === "light" ? "#fff" : "#1e1e1e";
+  const cardBg = mode === "light" ? "#fff" : "#1a1a1a";
+  const cardBorder = mode === "light" ? "#e0e0e0" : "#333";
+  const videoBorder = mode === "light" ? "#ccc" : "#444";
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: pageBg, color: textColor }}>
       <Navbar />
       <Box sx={{ textAlign: "center", py: 5 }}>
-        <Typography variant="h4" sx={{ fontWeight: "bold", mb: 1 }}>
+        <Typography variant="h4" sx={{ fontWeight: "bold", mb: 1, color: "#d4a373" }}>
           Event Gallery
         </Typography>
-        <Typography variant="body1" sx={{ color: subtitleColor }}>
+        <Typography sx={{ color: textColor }}>
           A glimpse of the cultural celebration!
         </Typography>
       </Box>
@@ -47,10 +49,11 @@ export default function Gallery() {
             <Grid item xs={12} sm={6} md={4} key={vid._id}>
               <Card
                 sx={{
+                  backgroundColor: cardBg,
+                  border: `1px solid ${cardBorder}`,
                   borderRadius: 3,
                   overflow: "hidden",
                   p: 2,
-                  backgroundColor: cardBg,
                   "&:hover": {
                     transform: "scale(1.03)",
                     boxShadow: "0 0 15px rgba(0,0,0,0.3)",
@@ -58,21 +61,21 @@ export default function Gallery() {
                   },
                 }}
               >
-               <video
-  src={`https://kalotsav-backend.vercel.app${vid.videoUrl}`}
-  controls
-  style={{
-    width: "100%",
-    height: "250px",
-    borderRadius: "10px",
-    objectFit: "cover",
-  }}
-/>
-
+                <video
+                  src={`${serverURL}${vid.videoUrl}`}
+                  controls
+                  style={{
+                    width: "100%",
+                    height: "250px",
+                    borderRadius: "10px",
+                    objectFit: "cover",
+                    border: `1px solid ${videoBorder}`,
+                  }}
+                />
                 <Typography sx={{ mt: 1, fontWeight: "bold", color: textColor }}>
                   {vid.name}
                 </Typography>
-                <Typography sx={{ color: subtitleColor }}>{vid.category}</Typography>
+                <Typography sx={{ color: "#aaa" }}>{vid.category}</Typography>
               </Card>
             </Grid>
           ))}

@@ -3,8 +3,9 @@ import { Box, Typography, Card, CardContent, Button, TextField } from "@mui/mate
 import PSidebar from "../components/PSidebar";
 import Navbar from "../../components/Navbar";
 import { uploadVideoAPI, getVideosAPI } from "../../services/allAPIs";
-import { useThemeContext } from "../../ContextShareAPI/ThemeContext";
 
+import { useThemeContext } from "../../ContextShareAPI/ThemeContext";
+import { serverURL } from "../../services/serverURL";
 export default function UploadVideo() {
   const { mode } = useThemeContext(); 
 
@@ -57,10 +58,9 @@ export default function UploadVideo() {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`https://kalotsav-backend-yourdeploy.vercel.app/api/videos/${id}`, {
-  method: "DELETE",
-});
-
+      const res = await fetch(`${serverURL}/api/videos/${id}`, {
+        method: "DELETE",
+      });
       const data = await res.json();
 
       if (data.success) {
@@ -107,7 +107,7 @@ export default function UploadVideo() {
                 variant="contained"
                 component="label"
                 sx={{
-                  backgroundColor: mode === "light" ? "black" : "beige",
+                  backgroundColor: mode === "light" ? "black" : "",
                   color: "white",
                   mb: 3,
                   "&:hover": {
@@ -119,9 +119,7 @@ export default function UploadVideo() {
                 <input type="file" hidden accept="video/*" onChange={handleUpload} />
               </Button>
 
-              {video && (
-                <Typography sx={{ mb: 2 }}>Selected: {video.name}</Typography>
-              )}
+              {video && <Typography sx={{ mb: 2 }}>Selected: {video.name}</Typography>}
 
               <TextField
                 fullWidth
@@ -133,15 +131,9 @@ export default function UploadVideo() {
                   "& input": { color: mode === "light" ? "black" : "white" },
                   "& label": { color: mode === "light" ? "black" : "white" },
                   "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: mode === "light" ? "black" : "white",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: mode === "light" ? "black" : "white",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "beige",
-                    },
+                    "& fieldset": { borderColor: mode === "light" ? "black" : "white" },
+                    "&:hover fieldset": { borderColor: mode === "light" ? "black" : "white" },
+                    "&.Mui-focused fieldset": { borderColor: "beige" },
                   },
                 }}
               />
@@ -150,12 +142,10 @@ export default function UploadVideo() {
                 fullWidth
                 variant="contained"
                 sx={{
-                  backgroundColor: mode === "light" ? "black" : "beige",
+                  backgroundColor: mode === "light" ? "black" : "",
                   color: "white",
                   fontWeight: "bold",
-                  "&:hover": {
-                    backgroundColor: mode === "light" ? "#222" : "#ff5a00",
-                  },
+                  "&:hover": { backgroundColor: mode === "light" ? "#222" : "#ff5a00" },
                 }}
                 onClick={handleSubmit}
                 disabled={uploading}
@@ -165,53 +155,54 @@ export default function UploadVideo() {
             </CardContent>
           </Card>
 
-        <Box sx={{ mt: 5 }}>
-  <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>
-    Uploaded Videos
-  </Typography>
+          <Box sx={{ mt: 5 }}>
+            <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>
+              Uploaded Videos
+            </Typography>
 
-  {videos.length === 0 ? (
-    <Typography>No videos uploaded yet.</Typography>
-  ) : (
-    <Box
-      sx={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-        gap: 3,
-      }}
-    >
-      {videos.map((v) => (
-        <Card
-          key={v._id}
-          sx={{
-            p: 2,
-            border: mode === "light" ? "1px solid black" : "1px solid #fff",
-            backgroundColor: mode === "light" ? "beige" : "#1e1e1e",
-            maxWidth: 300,       
-          }}
-        >
-          <Typography sx={{ fontWeight: 600 }}>
-            Category: {v.category}
-          </Typography>
+            {videos.length === 0 ? (
+              <Typography>No videos uploaded yet.</Typography>
+            ) : (
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                  gap: 3,
+                }}
+              >
+                {videos.map((v) => (
+                  <Card
+                    key={v._id}
+                    sx={{
+                      p: 2,
+                      border: mode === "light" ? "1px solid black" : "1px solid #fff",
+                      backgroundColor: mode === "light" ? "beige" : "#1e1e1e",
+                      maxWidth: 300,
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: 600 }}>Category: {v.category}</Typography>
 
-          <video width="100%" style={{ marginTop: 10 }} controls>
-            <source src={v.videoUrl} type="video/mp4" />
-          </video>
+                    <video
+                      width="100%"
+                      style={{ marginTop: 10 }}
+                      controls
+                    >
+                      <source src={`${serverURL}${v.videoUrl}`} type="video/mp4" />
+                    </video>
 
-          <Button
-            sx={{ mt: 1 }}
-            variant="contained"
-            color="error"
-            onClick={() => handleDelete(v._id)}
-          >
-            Delete
-          </Button>
-        </Card>
-      ))}
-    </Box>
-  )}
-</Box>
-
+                    <Button
+                      sx={{ mt: 1 }}
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleDelete(v._id)}
+                    >
+                      Delete
+                    </Button>
+                  </Card>
+                ))}
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>
