@@ -57,9 +57,10 @@ export default function UploadVideo() {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/videos/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`https://kalotsav-backend-yourdeploy.vercel.app/api/videos/${id}`, {
+  method: "DELETE",
+});
+
       const data = await res.json();
 
       if (data.success) {
@@ -107,7 +108,7 @@ export default function UploadVideo() {
                 component="label"
                 sx={{
                   backgroundColor: mode === "light" ? "black" : "beige",
-                  color: "blacl",
+                  color: "white",
                   mb: 3,
                   "&:hover": {
                     backgroundColor: mode === "light" ? "#222" : "beige",
@@ -150,7 +151,7 @@ export default function UploadVideo() {
                 variant="contained"
                 sx={{
                   backgroundColor: mode === "light" ? "black" : "beige",
-                  color: "black",
+                  color: "white",
                   fontWeight: "bold",
                   "&:hover": {
                     backgroundColor: mode === "light" ? "#222" : "#ff5a00",

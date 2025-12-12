@@ -58,16 +58,17 @@ export default function Gallery() {
                   },
                 }}
               >
-                <video
-                  src={`http://localhost:5000${vid.videoUrl}`}
-                  controls
-                  style={{
-                    width: "100%",
-                    height: "250px",
-                    borderRadius: "10px",
-                    objectFit: "cover",
-                  }}
-                />
+               <video
+  src={`https://kalotsav-backend.vercel.app${vid.videoUrl}`}
+  controls
+  style={{
+    width: "100%",
+    height: "250px",
+    borderRadius: "10px",
+    objectFit: "cover",
+  }}
+/>
+
                 <Typography sx={{ mt: 1, fontWeight: "bold", color: textColor }}>
                   {vid.name}
                 </Typography>
